@@ -1,23 +1,37 @@
+# Text of the books downloaded from:
+# A Mid Summer Night's Dream:
+#  http://www.gutenberg.org/cache/epub/2242/pg2242.txt
+# The Merchant of Venice:
+#  http://www.gutenberg.org/cache/epub/2243/pg2243.txt
+# Romeo and Juliet:
+#  http://www.gutenberg.org/cache/epub/1112/pg1112.txt
 
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-# 
-# http://www.rstudio.com/shiny/
-#
-
-library(shiny)
-
-shinyServer(function(input, output) {
-   
-  output$distPlot <- renderPlot({
-    
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2] 
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-    
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    
+function(input, output) {
+  
+  stats <- reactive({
+    input$update
+    isolate({
+      withProgress({
+        setProgress(message = "Processing lists...")
+        list1.var <- unlist(parseList(input$list1))
+        list2.var <- unlist(parseList(input$list2))
+        is <- intersect(list1.var, list2.var)
+        list1.var <- list1.var[list1.var %in% is]
+        list2.var <- list2.var[list2.var %in% is]
+        x <- generateStatistics(list1.var, list2.var, input$list1.name, input$list2.name)
+        x$obj
+      })
+    })
   })
   
-})
+  
+  output$plot <- renderPlot({
+    statistics <- stats()
+    if (!is.null(statistics)) {
+      withProgress({
+        setProgress(message = 'Generating plot...may take time depending on the size of your lists')
+        createPlot(statistics,input$cutoff,input$plot.type, input$list1.name, input$list2.name)
+      })
+    }
+  })
+}

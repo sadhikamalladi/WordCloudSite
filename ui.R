@@ -1,28 +1,26 @@
-
-# This is the user-interface definition of a Shiny web application.
-# You can find out more about building applications with Shiny here:
-# 
-# http://www.rstudio.com/shiny/
-#
-
-library(shiny)
-
-shinyUI(pageWithSidebar(
-  
+fluidPage(
   # Application title
-  headerPanel("Word Cloud Statistical Analysis"),
+  titlePanel("Word Cloud"),
   
-  # Sidebar with a slider input for number of bins
-  sidebarPanel(
-    sliderInput("bins",
-                "Number of bins:",
-                min = 1,
-                max = 50,
-                value = 30)
-  ),
-  
-  # Show a plot of the generated distribution
-  mainPanel(
-    plotOutput("distPlot")
+  sidebarLayout(
+    # Sidebar with a slider and selection inputs
+    sidebarPanel(
+      helpText("Enter your lists (separated by spaces, commas, or new lines) to compare and hit update!"),
+      textInput('list1', 'List 1:', value=paste('A','A','A','A','A','A','A','A','B','C','C')),
+      textInput('list1.name', 'List 1 Name:', value='List 1'),
+      textInput('list2', 'List 2:', value=paste('B','B','A','B','B','B','B','A','B','C')),
+      textInput('list2.name', 'List 2 Name:', value='List 2'),
+      textInput('cutoff', 'Significance Cut-off (BH-value)', value='0.05'),
+      radioButtons('plot.type', label='Plot Type',
+                   choices=list('Color by Significance' = 1,
+                                'Color by Count' = 2),
+                   selected=1),
+      actionButton("update", "Compare!")
+    ),
+    
+    # Show Word Cloud
+    mainPanel(
+      plotOutput("plot")
+    )
   )
-))
+)
