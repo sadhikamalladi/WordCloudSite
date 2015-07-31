@@ -30,7 +30,7 @@ function(input, output) {
     if (!is.null(statistics)) {
       withProgress({
         setProgress(message = 'Generating plot...may take time depending on the size of your lists')
-        createPlot(statistics,input$cutoff,input$plot.type, input$list1.name, input$list2.name)
+        createPlot(statistics,input)
       })
     }
   })

@@ -16,11 +16,15 @@ generateStatistics <- function(list1, list2, list1.name, list2.name) {
    }
 }
 
-createPlot <- function(stats, cutoff, plot.type, list1.name, list2.name) {
+createPlot <- function(stats, input) {
+  plot.type <- input$plot.type
+  cutoff <- input$cutoff
+  list1.name <- input$list1.name
+  list2.name <- input$list2.name
+  
   freq <- stats$frequency
   ct <- stats$counts
   bh <- as.numeric(stats$outputs[,'bh.Value'])
-  bh <- as.numeric(bh)
   names(bh) <- rownames(stats$outputs)
   cutoff <- as.numeric(cutoff)
   
@@ -31,8 +35,8 @@ createPlot <- function(stats, cutoff, plot.type, list1.name, list2.name) {
     plot(x=1:10,y=1:10)
     text(x=5,y=5,paste('All of your BH values were',unique(bh)))
   } else if (plot.type==1) {
-    WordCloudAnalysis::comparisonplot_colbysig(freq,bh,cutoff=cutoff,xlab=list1.name,ylab=list2.name)
+    WordCloudAnalysis::comparisonplot_colbysig(freq,bh,cutoff=cutoff,xlab=list1.name,ylab=list2.name,colors=c(input$col1,input$col2))
   } else if (plot.type==2) {
-    WordCloudAnalysis::comparisonplot_colbycount(freq,ct,bh,xlab=list1.name,ylab=list2.name)
+    WordCloudAnalysis::comparisonplot_colbycount(freq,ct,bh,xlab=list1.name,ylab=list2.name,colors=c(input$col1,input$col2))
   }
 }
