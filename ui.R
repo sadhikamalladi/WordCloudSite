@@ -5,22 +5,15 @@ fluidPage(
   sidebarLayout(
     # Sidebar with a slider and selection inputs
     sidebarPanel(
-      helpText("Enter your lists (separated by spaces, commas, or new lines) to compare and hit update!"),
-      textInput('list1', 'List 1:', value=paste('A','A','A','A','A','A','A','A','B','C','C')),
-      textInput('list1.name', 'List 1 Name:', value='List 1'),
-      textInput('list2', 'List 2:', value=paste('B','B','A','B','B','B','B','A','B','C')),
-      textInput('list2.name', 'List 2 Name:', value='List 2'),
-      textInput('sep', 'Separation value:', value=' '),
       
-      hr(),
-      
-      textInput('cutoff', 'Significance Cut-off (BH-value)', value='0.05'),
-      radioButtons('plot.type', label='Plot Type',
-                   choices=list('Color by Significance' = 1,
-                                'Color by Count' = 2),
+      # GSEA inputs
+      fileInput('exp',label='Upload expression file (.gct)', multiple=F),
+      fileInput('pheno',label='Upload phenotype file (.cls)', multiple=F),
+      radioButtons('gs', label='Select Broad MSigDB geneset to use', choices=list('C1','C2','C3','C4','C5','C6','C7'),
                    selected=1),
+      actionButton("gsea.run", "Run GSEA"),
       
-      hr(),
+      hr(), 
       
       radioButtons('col1', label='Color 1',
                    choices=list('Red' = 'red','Blue' = 'blue','Green' = 'green',
@@ -30,8 +23,7 @@ fluidPage(
                    choices=list('Red' = 'red','Blue' = 'blue','Green' = 'green',
                                 'Purple'='purple','Orange'='orange', 'Black'='black'),
                    selected='black'),
-      
-      actionButton("update", "Compare!")
+      actionButton("updateCol", "Update colors!")
     ),
     
     # Show Word Cloud
