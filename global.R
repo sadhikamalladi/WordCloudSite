@@ -1,11 +1,10 @@
 library(WordCloudAnalysis)
 
-parseList <- function(list) {
-  # Separation by comma
-  if (length(grep(',',list)) != 0)
-    strsplit(list,',',fixed=T)
-  else
-    strsplit(list,' ')
+parseList <- function(list,sep) {
+ x <- gsub('[[:punct:]]','',list)
+ x <- strsplit(list,sep)
+ x <- unlist(x)
+ x
 }
 
 generateStatistics <- function(list1, list2, list1.name, list2.name) {
@@ -24,15 +23,19 @@ createPlot <- function(stats, input) {
   
   freq <- stats$frequency
   ct <- stats$counts
-  bh <- as.numeric(stats$outputs[,'bh.Value'])
+  bh <- stats$outputs[,'p.Value']
+  bh <- as.numeric(bh)
   names(bh) <- rownames(stats$outputs)
   cutoff <- as.numeric(cutoff)
   
-  if (min(bh) > cutoff) {
+  if (sum(is.na(bh) | is.nan(bh)) > 0) {
+    plot(x=1:10,y=1:10)
+    text(x=5,y=5,paste('Bad BH calculation'))
+  } else if (min(bh) > cutoff) {
     plot(x=1:10,y=1:10)
     text(x=5,y=5,paste('None of your BH values were below the cutoff'))
   } else if (length(unique(bh)) == 1) {
-    plot(x=1:10,y=1:10)
+    plot(x=1:10,y=1:10,type='n')
     text(x=5,y=5,paste('All of your BH values were',unique(bh)))
   } else if (plot.type==1) {
     WordCloudAnalysis::comparisonplot_colbysig(freq,bh,cutoff=cutoff,xlab=list1.name,ylab=list2.name,colors=c(input$col1,input$col2))

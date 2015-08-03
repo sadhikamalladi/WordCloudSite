@@ -10,6 +10,7 @@ fluidPage(
       textInput('list1.name', 'List 1 Name:', value='List 1'),
       textInput('list2', 'List 2:', value=paste('B','B','A','B','B','B','B','A','B','C')),
       textInput('list2.name', 'List 2 Name:', value='List 2'),
+      textInput('sep', 'Separation value:', value=' '),
       
       hr(),
       

@@ -13,8 +13,8 @@ function(input, output) {
     isolate({
       withProgress({
         setProgress(message = "Processing lists...")
-        list1.var <- unlist(parseList(input$list1))
-        list2.var <- unlist(parseList(input$list2))
+        list1.var <- unlist(parseList(input$list1, input$sep))
+        list2.var <- unlist(parseList(input$list2, input$sep))
         is <- intersect(list1.var, list2.var)
         list1.var <- list1.var[list1.var %in% is]
         list2.var <- list2.var[list2.var %in% is]
